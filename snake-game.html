@@ -321,7 +321,7 @@
 </head>
 <body>
     <div class="game-container">
-        <!-- Back Button - Always present except on main menu -->
+        <!-- Back Button - Always present except on main menu and game over screen -->
         <button id="back-button" class="absolute top-4 left-4 p-2 bg-gray-600 text-white rounded-full shadow-lg z-10 hidden">⬅️ Back</button>
 
         <!-- Main Menu / Instructions Screen -->
@@ -518,7 +518,7 @@
 
         // Intervals for different game updates
         let globalGameInterval = null;      // Updates AI, moving obstacles, redraws
-        let userSnakeMovementInterval = null; // Updates user snake movement and collision
+        let userSnakeMovementInterval = null; // Variable to hold the interval ID for user snake movement
 
         // Active power-ups for the user snake
         let activePowerUps = {
@@ -624,7 +624,7 @@
             globalGameInterval = setInterval(globalGameTick, speed);
         }
 
-        function startUserSnakeMovementLoop(speed) {
+        function startUserSnakeMovementLoop(speed) { // Correct function name
             if (userSnakeMovementInterval) {
                 clearInterval(userSnakeMovementInterval);
             }
@@ -653,8 +653,8 @@
             screenElement.classList.remove('hidden');
 
             // Manage back button visibility
-            if (screenElement === instructionsScreen) {
-                backButton.classList.add('hidden'); // No back button on main menu
+            if (screenElement === instructionsScreen || screenElement === gameOverScreen) { // Modified condition here
+                backButton.classList.add('hidden'); // No back button on main menu or game over
             } else {
                 backButton.classList.remove('hidden');
             }
@@ -714,7 +714,7 @@
                 // Restart intervals based on current speed and power-up state
                 startGlobalGameLoop(currentSpeed);
                 const userSpeed = activePowerUps.speed.isActive ? Math.max(minGameSpeed, currentSpeed * speedBoostMultiplier) : currentSpeed;
-                startUserSnakeMovementLoop(userSpeed);
+                startUserSnakeMovementLoop(userSpeed); // Correct function call
             }
         }
 
@@ -1066,7 +1066,7 @@
             gameRunning = true;
             gamePaused = false; // Ensure game is not paused when starting
             startGlobalGameLoop(currentSpeed);
-            startUserSnakeMovementLoop(currentSpeed);
+            startUserSnakeMovementLoop(currentSpeed); // Correct function call
             showGameScreen();
         }
 
